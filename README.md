@@ -28,6 +28,11 @@ func main() {
 }
 ```
 
+## Installation
+```
+$ go get github.com/donke/manyflags
+```
+
 ## License
 
 MIT
