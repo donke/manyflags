@@ -1,6 +1,7 @@
 package manyflags
 
 import (
+	"flag"
 	"os"
 	"testing"
 )
@@ -9,7 +10,6 @@ func equal(a, b []string) bool {
 	if len(a) != len(b) {
 		return false
 	}
-
 	for i := range a {
 		if a[i] != b[i] {
 			return false
@@ -22,6 +22,22 @@ func TestOverwriteArgs(t *testing.T) {
 	expect := []string{"command", "-a", "-b", "-c"}
 	os.Args = []string{"command", "-abc"}
 	OverwriteArgs()
+	if equal(expect, os.Args) {
+		return
+	}
+	t.Errorf("expected: %v actual: %v", expect, os.Args)
+}
+
+func TestOverwriteArgsWithLongNameOption(t *testing.T) {
+	expect := []string{"command", "-a", "-b", "-cafe", "babe"}
+	os.Args = []string{"command", "-ab", "-cafe", "babe"}
+
+	flag.Bool("a", false, "")
+	flag.Bool("b", false, "")
+	flag.String("cafe", "", "")
+
+	OverwriteArgs()
+	flag.Parse()
 	if equal(expect, os.Args) {
 		return
 	}

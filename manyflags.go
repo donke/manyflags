@@ -1,6 +1,7 @@
 package manyflags
 
 import (
+	"flag"
 	"os"
 	"regexp"
 )
@@ -32,6 +33,13 @@ func remake(args []string) []string {
 		}
 
 		chunk := flagRe.FindStringSubmatch(v)
+
+		// longname flag. ignore.
+		if flag.Lookup(chunk[1]) != nil {
+			result = append(result, args[i])
+			continue
+		}
+
 		result = append(result, splitChunk(chunk[1])...)
 	}
 
